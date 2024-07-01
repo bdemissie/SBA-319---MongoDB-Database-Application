@@ -1,6 +1,7 @@
 import express from "express"
 import dotenv from "dotenv"
 import { BSONType } from "mongodb";
+import db from "./db/conn.mjs"
 
 dotenv.config();
 
@@ -68,6 +69,25 @@ async () => {
 
 app.get("/", (req, res) => {
     res.send("Welcome to the SBA 319 MongoDB Database Application")
+})
+
+app.get("/add", async (req, res) => {
+    let collection = await db.collection("users");
+    let newUser = {  
+        first_name: "Olivia",
+        last_name: "Davis",
+        phone_number: "1234567895",
+        username: "olivia_davis",
+        email: "olivia@example.com",
+        password: "$2a$10$CwTycUXWue0Thq9StjUM0uJ8ldGpMyvV61YTV7.1Qmrr2oI.lHpPm",
+        admin: false
+      };
+
+      let result = await collection.insertOne(newUser).catch((e) => {
+        return e.errInfo.details.schemaRulesNotSatisfied;
+      });
+      res.send(result).status(204)
+
 })
 
 app.use((err, _req, res, next) => {
