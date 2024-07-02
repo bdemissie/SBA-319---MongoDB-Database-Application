@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Actions</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+
+
+        <h2 class="text-center mb-4">Admin Actions</h2>
+
+        <!-- Get All User Data -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <h3>Get All User Data</h3>
+            </div>
+            <div class="card-body">
+                <form action="/admin/users" method="get">
+                    <button type="submit" class="btn btn-primary btn-block">Get All Users</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Search User by First and Last Name -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <h3>Search User by Name</h3>
+            </div>
+            <div class="card-body">
+                <form action="/admin/users/search" method="get">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" class="form-control" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" name="lastName" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Search User</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Delete User by UserName -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <h3>Delete by UserName</h3>
+            </div>
+            <div class="card-body">
+                <form action="/admin/users/delete" method="post">
+                    <div class="form-group">
+                        <label for="userId">User Name</label>
+                        <input type="text" class="form-control" id="userId" name="userId" required>
+                    </div>
+                    <button type="submit" class="btn btn-danger btn-block">Delete User</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Give Admin Privilege -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <h3>Give Admin Privilege</h3>
+            </div>
+            <div class="card-body">
+                <form action="/admin/users/give-admin" method="post">
+                    <div class="form-group">
+                        <label for="userId">User Name</label>
+                        <input type="text" class="form-control" id="userId" name="userId" required>
+                    </div>
+                    <button type="submit" class="btn btn-success btn-block">Give Admin Privilege</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+    
+</body>
+</html>

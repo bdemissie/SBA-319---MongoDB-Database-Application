@@ -1,15 +1,23 @@
 import express from "express"
 import dotenv from "dotenv"
-import { BSONType } from "mongodb";
-import db from "./db/conn.mjs"
+import db from "./db/conn.mjs";
+import signUpRouter from './routes/sign_up.mjs'
 
-dotenv.config();
+
+
+const router = express.Router();
 
 const PORT = process.env.PORT || 3000;
 
 const app = express();
 
+
+// Set views path and view engine setup
+app.set("views", "./views"); // specify the views directory
+app.set("view engine", "ejs"); // register the template engine
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 // Create a collection with Schema Validation
 
@@ -35,29 +43,29 @@ async () => {
                         description: " 'last_name' is required and must be a string"
                     },
                     phone_number: {
-                        bsonType: "string",
+                        bsonTypes: "string",
                         description: " 'phone_number' is required and must match the pattern of a phone number",
                         pattern: "^[0-9]{10, 16}$"
                     },
                     username: {
-                        "bsonType": "string",
-                        "description": "must be a string, start with a letter, and is required",
-                        "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$"
+                        bsonType: "string",
+                        description: "must be a string, start with a letter, and is required",
+                        pattern: "^[a-zA-Z][a-zA-Z0-9_]*$"
                       },
                     email: {
-                        "bsonType": "string",
-                        "description": "must be a string and is required",
-                        "pattern": "^\\S+@\\S+\\.\\S+$"
+                        bsonType: "string",
+                        description: "must be a string and is required",
+                        
                       },
                     password: {
-                        "bsonType": "string",
-                        "description": "must be a string with min 6 characters and is required",
-                        "minLength": 6
+                        bsonType: "string",
+                        description: "must be a string with min 6 characters and is required",
+                        minLength: 6
                       },
                     admin: {
-                        "bsonType": "bool",
-                        "description": "must be a boolean and is optional",
-                        "default": false
+                        bsonType: "bool",
+                        description: "must be a boolean and is optional",
+                        default: false
                     }
 
                 }
@@ -71,24 +79,8 @@ app.get("/", (req, res) => {
     res.send("Welcome to the SBA 319 MongoDB Database Application")
 })
 
-app.get("/add", async (req, res) => {
-    let collection = await db.collection("users");
-    let newUser = {  
-        first_name: "Olivia",
-        last_name: "Davis",
-        phone_number: "1234567895",
-        username: "olivia_davis",
-        email: "olivia@example.com",
-        password: "$2a$10$CwTycUXWue0Thq9StjUM0uJ8ldGpMyvV61YTV7.1Qmrr2oI.lHpPm",
-        admin: false
-      };
-
-      let result = await collection.insertOne(newUser).catch((e) => {
-        return e.errInfo.details.schemaRulesNotSatisfied;
-      });
-      res.send(result).status(204)
-
-})
+// Use the signup rouete 
+app.use('/sign-up', signUpRouter);
 
 app.use((err, _req, res, next) => {
     res.status(500).send(err)
