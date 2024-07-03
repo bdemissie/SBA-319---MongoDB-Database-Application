@@ -1,9 +1,11 @@
 import {MongoClient} from 'mongodb'
+import dotenv from 'dotenv';
+dotenv.config();
 
 const user  = process.env.USER;
 const password = process.env.PASSWORD;
-// const uri = `mongodb+srv://${user}:${password}@mongocluster.kpjim1y.mongodb.net/?retryWrites=true&w=majority&appName=MongoCluster`
-let uri = "mongodb+srv://kermeloswoldeyesdr:MTIJoSjMpTQL00lO@mongocluster.kpjim1y.mongodb.net/?retryWrites=true&w=majority&appName=MongoCluster"
+
+let uri = `mongodb+srv://${user}:${password}@mongocluster.kpjim1y.mongodb.net/?retryWrites=true&w=majority&appName=MongoCluster`
 const client = new MongoClient(uri);
 
 let conn;
