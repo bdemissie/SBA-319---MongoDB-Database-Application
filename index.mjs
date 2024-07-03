@@ -2,8 +2,10 @@ import express from "express"
 import dotenv from "dotenv"
 import db from "./db/conn.mjs";
 import signUpRouter from './routes/sign_up.mjs'
-
-
+import signInRouter from './routes/sign_in.mjs'
+import changePasswordRouter from './routes/change_password.mjs'
+import adminRouter from './routes/admin.mjs'
+import methodOverride from "method-override"
 
 const router = express.Router();
 
@@ -12,12 +14,15 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 
+
+
 // Set views path and view engine setup
 app.set("views", "./views"); // specify the views directory
 app.set("view engine", "ejs"); // register the template engine
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+app.use(methodOverride('_method'));
 
 // Create a collection with Schema Validation
 
@@ -79,8 +84,19 @@ app.get("/", (req, res) => {
     res.send("Welcome to the SBA 319 MongoDB Database Application")
 })
 
-// Use the signup rouete 
+// Use the signup router
 app.use('/sign-up', signUpRouter);
+
+// Use the signin router
+app.use('/sign-in', signInRouter);
+
+// use the change_password router
+
+app.use('/change-password', changePasswordRouter);
+
+// use the admin router
+
+app.use('/admin', adminRouter);
 
 app.use((err, _req, res, next) => {
     res.status(500).send(err)
