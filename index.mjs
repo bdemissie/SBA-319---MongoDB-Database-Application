@@ -1,3 +1,5 @@
+// Import required modules
+
 import express from "express"
 import dotenv from "dotenv"
 import db from "./db/conn.mjs";
@@ -7,21 +9,29 @@ import changePasswordRouter from './routes/change_password.mjs'
 import adminRouter from './routes/admin.mjs'
 import methodOverride from "method-override"
 
-const router = express.Router();
 
-const PORT = process.env.PORT || 3000;
-
+// Create an express application instance
 const app = express();
 
+// Create an express router
+const router = express.Router();
+
+// Read the port number from the .env
+dotenv.config();
+const PORT = process.env.PORT || 3000;
+console.log(PORT)
 
 
+// Specify the views directory and register .ejs template engines
+app.set("views", "./views");
+app.set("view engine", "ejs");
 
-// Set views path and view engine setup
-app.set("views", "./views"); // specify the views directory
-app.set("view engine", "ejs"); // register the template engine
 
+// Setup the Midleware to parse json bodies
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+// Parse URL-encoded bodies
+app.use(express.urlencoded({ extended: true }));
+// Midlware to support method overide for html views
 app.use(methodOverride('_method'));
 
 // Create a collection with Schema Validation
@@ -56,17 +66,17 @@ async () => {
                         bsonType: "string",
                         description: "must be a string, start with a letter, and is required",
                         pattern: "^[a-zA-Z][a-zA-Z0-9_]*$"
-                      },
+                    },
                     email: {
                         bsonType: "string",
                         description: "must be a string and is required",
-                        
-                      },
+
+                    },
                     password: {
                         bsonType: "string",
                         description: "must be a string with min 6 characters and is required",
                         minLength: 6
-                      },
+                    },
                     admin: {
                         bsonType: "bool",
                         description: "must be a boolean and is optional",
@@ -80,6 +90,7 @@ async () => {
     }
 }
 
+// Define the root route path and assign a welcome message
 app.get("/", (req, res) => {
     res.send("Welcome to the SBA 319 MongoDB Database Application")
 })
@@ -91,17 +102,17 @@ app.use('/sign-up', signUpRouter);
 app.use('/sign-in', signInRouter);
 
 // use the change_password router
-
 app.use('/change-password', changePasswordRouter);
 
 // use the admin router
-
 app.use('/admin', adminRouter);
 
+// Error handling Middleware
 app.use((err, _req, res, next) => {
     res.status(500).send(err)
 });
 
+// Start server
 app.listen(PORT, () => {
     console.log(`Server is running on port: ${PORT}`)
 })

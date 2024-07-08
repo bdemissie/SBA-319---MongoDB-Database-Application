@@ -1,15 +1,18 @@
+// Import the required moduels
 import express from 'express';
 import db from "../db/conn.mjs";
 
 // Create a router module
 const router = express.Router();
 
+// Create a get route to render the change password view
 router.get('/', (req, res) => {
 
     res.render('change_password');
 
 });
 
+// Create a post route to update existing password
 router.post('/', async (req, res) => {
 
     try {

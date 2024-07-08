@@ -1,3 +1,4 @@
+// Import required modules
 import express from 'express';
 import db from "../db/conn.mjs";
 import { ObjectId } from 'mongodb';
@@ -5,13 +6,14 @@ import { ObjectId } from 'mongodb';
 // Create a router module
 const router = express.Router();
 
-
+// Create a get route to render the admin sign in page
 router.get('/sign-in', (req, res) => {
 
     res.render('admin');
 
 });
 
+// Create a post route to show the available admin APIs
 router.post('/sign-in', async (req, res) => {
 
     try {
@@ -89,6 +91,7 @@ catch (err) {
 
 })
 
+// Create a get route for admin to show all users 
 router.get('/users', async (req, res) => {
 
     try{
@@ -120,6 +123,7 @@ router.get('/users', async (req, res) => {
     }
 })
 
+// Create a get route to get a single user by ID
 router.get('/user/id/:id', async (req, res) => {
 
     try {
@@ -139,6 +143,7 @@ router.get('/user/id/:id', async (req, res) => {
     }
 } )
 
+// Create a delete route to find and delete user by ID
 router.delete('/user/id/:id', async (req, res) => {
 
     try {
@@ -158,6 +163,7 @@ router.delete('/user/id/:id', async (req, res) => {
     }
 } )
 
+// Create a get route to find and show user by username
 router.get('/user/username/:username', async (req, res) => {
 
     try {
@@ -177,7 +183,7 @@ router.get('/user/username/:username', async (req, res) => {
     }
 } )
 
-
+// Greate a delete route to find and delete user by username
 router.delete('/user/username/:username', async (req, res) => {
 
     try {
@@ -197,6 +203,7 @@ router.delete('/user/username/:username', async (req, res) => {
     }
 } )
 
+// Create a patch route to find and update user username
 router.patch('/user/username/:username', async (req, res) => {
 
     try {
@@ -219,13 +226,14 @@ router.patch('/user/username/:username', async (req, res) => {
     }
 } )
 
+// Create a patch route to find user by ID and assign admin privilage
 router.patch('/user/id/:id/:isadmin', async (req,res) => {
 
     try {
 
-        const collection = await db.collection('users');
+        let collection = await db.collection('users');
 
-        const query = {_id: new ObjectId(req.params.id)};
+        let query = {_id: new ObjectId(req.params.id)};
 
         let result = await collection.updateOne(query, {
             $set: {"admin": req.params.isadmin}
@@ -236,6 +244,29 @@ router.patch('/user/id/:id/:isadmin', async (req,res) => {
         res.status(500).json({message: 'Something went wrong', error: err.message})
     }
 })
+
+// Create a post route to add a new 
+router.post('/user/add', async(req, res) => {
+
+    try {
+
+        let collection = await db.collection('users');
+
+        let newUser = req.body;
+
+        let result = await collection.insertOne(newUser);
+
+        res.status(200).json(result)
+        
+    }
+
+    catch (err) {
+
+        res.status(500).json({message: 'Something went wrong', error: err.message})
+
+    }
+}
+)
 
 
 export default router;

@@ -1,16 +1,18 @@
+// Import required modules
 import express from 'express';
 import db from "../db/conn.mjs";
 
 // Create a router module
 const router = express.Router();
 
-
+// Create a get route fro the sign in page
 router.get('/', (req, res) => {
-
+    // Render the sign in view
     res.render('sign_in');
 
 });
 
+// Create a post route for the sign in page
 router.post('/', async (req, res) => {
 
     try {
